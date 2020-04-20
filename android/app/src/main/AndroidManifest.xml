@@ -27,6 +27,10 @@
             android:name="flutterEmbedding"
             android:value="2" />
         <meta-data android:name="com.google.android.geo.API_KEY"
+<<<<<<< Updated upstream
             android:value="AIzaSyAFq0GPjdDzqxug54owzlHqMgl4Y_606-8"/>
+=======
+            android:value="AIzaSyDeHQYsxncyo0mMKEtAoa2lIFCmdoQQpW4"/>
+>>>>>>> Stashed changes
     </application>
 </manifest>

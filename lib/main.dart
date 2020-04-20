@@ -10,15 +10,29 @@ class MyApp extends StatelessWidget {
       title: 'Welcome to Flutter',
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('Welcome to Flutter'),
+          title: const Text('Maps'),
         ),
         body: GoogleMap(
           initialCameraPosition: CameraPosition(
-            target: const LatLng(-6.200000, 106.816666),
+            target: const LatLng(-0.789275, 113.921327),
             zoom: 1.0,
           ),
+          markers: createMarkers(),
         ),
       ),
     );
   }
+
+  Set<Marker> createMarkers() {
+    Set<Marker> markers = {};
+
+    markers.add(Marker(
+      markerId: MarkerId('indonesia'),
+      position: LatLng(-0.789275, 113.921327),
+      infoWindow: InfoWindow(title: 'Indonesia', snippet: 'test'),
+    ));
+
+    return markers;
+  }
+
 }

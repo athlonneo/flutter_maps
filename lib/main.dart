@@ -6,9 +6,18 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
+import 'package:csv/csv.dart';
+import 'package:flutter/services.dart' show rootBundle;
+
+import 'dart:async';
+
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
+
+  Completer<GoogleMapController> _controller = Completer();
+  List<List<dynamic>> countriesData = [];
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -18,6 +27,7 @@ class MyApp extends StatelessWidget {
           title: const Text('Maps'),
         ),
         body: GoogleMap(
+          onMapCreated: _onMapCreated,
           initialCameraPosition: CameraPosition(
             target: const LatLng(-0.789275, 113.921327),
             zoom: 1.0,
@@ -38,6 +48,16 @@ class MyApp extends StatelessWidget {
     ));
 
     return markers;
+  }
+
+  LoadAsset() async{
+    final data = await rootBundle.loadString("assets/countries.csv");
+    countriesData = CsvToListConverter().convert(data);
+  }
+
+  _onMapCreated(GoogleMapController controller) {
+    LoadAsset();
+    _controller.complete(controller);
   }
 }
 

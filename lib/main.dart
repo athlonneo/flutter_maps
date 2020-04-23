@@ -41,7 +41,7 @@ class MyApp extends StatelessWidget {
   Set<Marker> createMarkers() {
     Set<Marker> markers = {};
     markers.add(Marker(
-      markerId: MarkerId('indonesia'),
+      markerId: MarkerId('Indonesia'),
       position: LatLng(-0.789275, 113.921327),
       infoWindow: InfoWindow(title: 'Indonesia', snippet: countriesData.toString()),
     ));

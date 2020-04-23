@@ -40,23 +40,22 @@ class MyApp extends StatelessWidget {
 
   Set<Marker> createMarkers() {
     Set<Marker> markers = {};
-    //CovidData data = await fetchData();
     markers.add(Marker(
       markerId: MarkerId('indonesia'),
       position: LatLng(-0.789275, 113.921327),
-      infoWindow: InfoWindow(title: 'Indonesia', snippet: 'uwu'),
+      infoWindow: InfoWindow(title: 'Indonesia', snippet: countriesData.toString()),
     ));
 
     return markers;
   }
 
-  LoadAsset() async{
+  loadAsset() async{
     final data = await rootBundle.loadString("assets/countries.csv");
     countriesData = CsvToListConverter().convert(data);
   }
 
   _onMapCreated(GoogleMapController controller) {
-    LoadAsset();
+    loadAsset();
     _controller.complete(controller);
   }
 }

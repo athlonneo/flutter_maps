@@ -23,6 +23,7 @@ class MyApp extends StatelessWidget {
       home: Scaffold(
         appBar: AppBar(
           title: const Text('Maps'),
+          centerTitle: true,
         ),
         body: FutureBuilder<List>(
             future: loadAsset(),
@@ -34,6 +35,7 @@ class MyApp extends StatelessWidget {
                     target: const LatLng(-0.789275, 113.921327),
                     zoom: 1.0,
                   ),
+                  onCameraMove: _onCameraMove,
                   markers: createMarkers(),
                 );
               } else {
@@ -46,17 +48,25 @@ class MyApp extends StatelessWidget {
 
   Set<Marker> createMarkers() {
     Set<Marker> markers = {};
-    for(int i = 0; i < 225; i++){
+    for(int i = 0; i < 244; i++){
       markers.add(Marker(
-        markerId: MarkerId(countriesData[i][4]),
+        markerId: MarkerId(countriesData[i][3].substring(2,countriesData[i][3].length-2)),
         position: LatLng(countriesData[i][1], countriesData[i][2]),
-        infoWindow: InfoWindow(title: countriesData[i][4], snippet: countriesData[i][4]),
+        infoWindow: InfoWindow(title: countriesData[i][3].substring(2,countriesData[i][3].length-2) , snippet: countriesData[i][3].substring(2,countriesData[i][3].length-2)),
       ));
     }
     print(countriesData.toString());
     return markers;
   }
+
+  _onCameraMove(CameraPosition position){
+    print('move');
+    print(countriesData[1][3].substring(2,countriesData[1][3].length-2));
+    // print(countriesData.length.t);
+  }
+
 }
+
 
 Future<List> loadAsset() async {
   List<List<dynamic>> countriesData = [];

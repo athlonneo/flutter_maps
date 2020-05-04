@@ -35,7 +35,6 @@ class MyApp extends StatelessWidget {
                     target: const LatLng(-0.789275, 113.921327),
                     zoom: 1.0,
                   ),
-                  onCameraMove: _onCameraMove,
                   markers: createMarkers(),
                 );
               } else {
@@ -59,16 +58,20 @@ class MyApp extends StatelessWidget {
     return markers;
   }
 
+  /*
   _onCameraMove(CameraPosition position){
     print('move');
     print(countriesData[1][3].substring(2,countriesData[1][3].length-2));
     // print(countriesData.length.t);
   }
-
+  */
 }
 
 
 Future<List> loadAsset() async {
+  //CovidData covid = await fetchData();
+  //print(covid.toString());
+
   List<List<dynamic>> countriesData = [];
   final data = await rootBundle.loadString("assets/countries.csv");
   countriesData = CsvToListConverter().convert(data);
@@ -76,8 +79,7 @@ Future<List> loadAsset() async {
 }
 
 Future<CovidData> fetchData() async {
-  final response =
-      await http.get('https://covid19.mathdro.id/api/countries/indonesia');
+  final response = await http.get('https://covid19.mathdro.id/api/countries/indonesia');
 
   if (response.statusCode == 200) {
     return CovidData.fromJson(json.decode(response.body));

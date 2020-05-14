@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
                   markers: createMarkers(),
                 );
               } else {
-                return Text("Failed Loading");
+                return Text("Loading...");
               }
             }),
       ),
@@ -47,59 +47,31 @@ class MyApp extends StatelessWidget {
 
   Set<Marker> createMarkers() {
     Set<Marker> markers = {};
-    for(int i = 0; i < 244; i++){
+    for(int i = 0; i < 4; i++){
       markers.add(Marker(
         markerId: MarkerId(countriesData[i][3].substring(2,countriesData[i][3].length-2)),
         position: LatLng(countriesData[i][1], countriesData[i][2]),
-        infoWindow: InfoWindow(title: countriesData[i][3].substring(2,countriesData[i][3].length-2) , snippet: countriesData[i][3].substring(2,countriesData[i][3].length-2)),
+        infoWindow: InfoWindow(title: countriesData[i][3].substring(2,countriesData[i][3].length-2) , snippet: 'c'+countriesData[i][5].toString()+', r'+countriesData[i][6].toString()+', d'+countriesData[i][7].toString()),
       ));
     }
-    print(countriesData.toString());
+    //print(countriesData.toString());
     return markers;
   }
-
-  /*
-  _onCameraMove(CameraPosition position){
-    print('move');
-    print(countriesData[1][3].substring(2,countriesData[1][3].length-2));
-    // print(countriesData.length.t);
-  }
-  */
 }
 
 
 Future<List> loadAsset() async {
-  //CovidData covid = await fetchData();
-  //print(covid.toString());
-
   List<List<dynamic>> countriesData = [];
   final data = await rootBundle.loadString("assets/countries.csv");
   countriesData = CsvToListConverter().convert(data);
+
+  for (var i = 0; i < 4; i++) {
+    final response = await http.get('https://covid19.mathdro.id/api/countries/'+countriesData[i][0].substring(2,4));
+    Map<String, dynamic> covidData = json.decode(response.body);
+    countriesData[i].add(covidData['confirmed']['value']);
+    countriesData[i].add(covidData['recovered']['value']);
+    countriesData[i].add(covidData['deaths']['value']);
+    print(countriesData[i]);
+  }
   return countriesData;
-}
-
-Future<CovidData> fetchData() async {
-  final response = await http.get('https://covid19.mathdro.id/api/countries/indonesia');
-
-  if (response.statusCode == 200) {
-    return CovidData.fromJson(json.decode(response.body));
-  } else {
-    throw Exception('Failed to load data');
-  }
-}
-
-class CovidData {
-  int confirmed;
-  int recovered;
-  int death;
-
-  CovidData({this.confirmed, this.recovered, this.death});
-
-  factory CovidData.fromJson(Map<String, dynamic> json) {
-    return CovidData(
-      confirmed: json['confirmed']['value'],
-      recovered: json['recovered']['value'],
-      death: json['death']['value'],
-    );
-  }
 }
